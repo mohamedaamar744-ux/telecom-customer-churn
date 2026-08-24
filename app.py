@@ -1664,38 +1664,49 @@ def batch_prediction_page():
 def about_page():
     st.markdown(
         "<h1 style='font-size:24px;margin-bottom:4px;'>About</h1>",
-        unsafe_allow_html=True
+        unsafe_allow_html=True,
     )
 
     st.markdown(
         "<p style='color:#94a3b8;font-size:13px;margin-bottom:24px;'>"
         "Customer Churn Prediction Project"
         "</p>",
-        unsafe_allow_html=True
+        unsafe_allow_html=True,
     )
 
-    st.markdown("""<div class="card">
-<h3 style="color:#f8fafc;margin-bottom:16px;">🧠 Churn Intelligence</h3>
-<p style="line-height:1.8;color:#e2e8f0;margin-bottom:16px;">This application uses machine learning to predict customer churn for a telecom company. The model was trained on the Telco Customer Churn dataset containing 7,043 customer records.</p>
-<h4 style="color:#f8fafc;margin:24px 0 12px 0;">Model Details</h4>
-<ul style="line-height:1.8;color:#e2e8f0;padding-left:20px;">
-<li><strong>Algorithm:</strong> XGBoost (Tuned)</li>
-<li><strong>Best Params:</strong> max_depth=5, n_estimators=200, learning_rate=0.1</li>
-<li><strong>Accuracy:</strong> 85.31%</li>
-<li><strong>ROC-AUC:</strong> 0.91</li>
-<li><strong>Recall:</strong> 0.72</li>
-</ul>
-<h4 style="color:#f8fafc;margin:24px 0 12px 0;">Features Used</h4>
-<p style="line-height:1.8;color:#e2e8f0;margin-bottom:16px;">The model uses 23 features including demographics, account information, services subscribed, and billing details to make predictions.</p>
-<h4 style="color:#f8fafc;margin:24px 0 12px 0;">How to Use</h4>
-<ol style="line-height:1.8;color:#e2e8f0;padding-left:20px;">
-<li>Navigate to <strong>Predict Churn</strong> to make individual predictions.</li>
-<li>Use <strong>Batch Prediction</strong> to process multiple customers via CSV.</li>
-<li>Explore <strong>Model Performance</strong> and <strong>Feature Importance</strong> for insights.</li>
-<li>Check <strong>Business Insights</strong> for actionable recommendations.</li>
-</ol>
-<div style="margin-top:24px;padding-top:16px;border-top:1px solid #2d2d5a;font-size:12px;color:#64748b;">Built with Streamlit • Powered by XGBoost • Dataset: Telco Customer Churn</div>
-</div>""", unsafe_allow_html=True)
+    st.html("""
+    <div class="card">
+        <h3 style="color:#f8fafc;margin-bottom:16px;">🧠 Churn Intelligence</h3>
+        <p style="line-height:1.8;color:#e2e8f0;margin-bottom:16px;">This application uses machine learning to predict customer churn for a telecom company. The model was trained on the Telco Customer Churn dataset containing 7,043 customer records.</p>
+        
+        <h4 style="color:#f8fafc;margin:24px 0 12px 0;">Model Details</h4>
+        <ul style="line-height:1.8;color:#e2e8f0;padding-left:20px;">
+            <li><strong>Best Model:</strong> Logistic Regression (Tuned)</li>
+            <li><strong>Best Parameter:</strong> C = 1</li>
+            <li><strong>Accuracy:</strong> 75.09%</li>
+            <li><strong>ROC-AUC:</strong> 0.862</li>
+            <li><strong>Recall (Yes):</strong> 0.828</li>
+            <li><strong>Precision (Yes):</strong> 0.518</li>
+            <li><strong>F1-score (Yes):</strong> 0.638</li>
+        </ul>
+        <p style="line-height:1.8;color:#94a3b8;font-size:13px;margin-top:12px;">The model was tuned using GridSearchCV with Recall as the optimization metric to improve the identification of customers who are likely to churn.</p>
+        
+        <h4 style="color:#f8fafc;margin:24px 0 12px 0;">Features Used</h4>
+        <p style="line-height:1.8;color:#e2e8f0;margin-bottom:16px;">The model uses 23 features covering customer demographics, account information, subscribed services, contract details, payment methods, and billing information.</p>
+        
+        <h4 style="color:#f8fafc;margin:24px 0 12px 0;">How to Use</h4>
+        <ol style="line-height:1.8;color:#e2e8f0;padding-left:20px;">
+            <li>Navigate to <strong>Predict Churn</strong> to make individual customer predictions.</li>
+            <li>Use <strong>Batch Prediction</strong> to process multiple customers through a CSV file.</li>
+            <li>Explore <strong>Model Performance</strong> to evaluate the selected model.</li>
+            <li>Use <strong>Model Comparison</strong> to compare the machine learning models.</li>
+            <li>Explore <strong>Feature Importance</strong> to understand the most influential features.</li>
+            <li>Check <strong>Business Insights</strong> for actionable churn-reduction recommendations.</li>
+        </ol>
+        
+        <div style="margin-top:24px;padding-top:16px;border-top:1px solid #2d2d5a;font-size:12px;color:#64748b;">Built with Streamlit • Powered by Machine Learning • Dataset: Telco Customer Churn</div>
+    </div>
+    """)
 # ===================== MAIN ROUTING =====================
 page = st.session_state.page
 
