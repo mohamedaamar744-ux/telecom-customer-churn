@@ -904,21 +904,58 @@ def model_performance_page():
         fpr_rf, tpr_rf = [0, 0.2, 0.4, 0.6, 0.8, 1.0], [0, 0.65, 0.78, 0.86, 0.92, 1.0]
         fpr_xgb, tpr_xgb = [0, 0.2, 0.4, 0.6, 0.8, 1.0], [0, 0.68, 0.82, 0.90, 0.95, 1.0]
         
-fig.add_trace(go.Scatter(x=fpr_lr, y=tpr_lr, mode='lines', name='Logistic Regression (AUC = 0.862)', line=dict(color='#60a5fa')))
-fig.add_trace(go.Scatter(x=fpr_dt, y=tpr_dt, mode='lines', name='Decision Tree (AUC = 0.660)', line=dict(color='#f87171')))
-fig.add_trace(go.Scatter(x=fpr_rf, y=tpr_rf, mode='lines', name='Random Forest (AUC = 0.840)', line=dict(color='#34d399')))
-fig.add_trace(go.Scatter(x=fpr_xgb, y=tpr_xgb, mode='lines', name='XGBoost (AUC = 0.839)', line=dict(color='#a78bfa', width=3)))
+        fig.add_trace(go.Scatter(
+            x=fpr_lr, y=tpr_lr,
+            mode='lines',
+            name='Logistic Regression (AUC = 0.862)',
+            line=dict(color='#60a5fa')
+        ))
+
+        fig.add_trace(go.Scatter(
+            x=fpr_dt, y=tpr_dt,
+            mode='lines',
+            name='Decision Tree (AUC = 0.660)',
+            line=dict(color='#f87171')
+        ))
+
+        fig.add_trace(go.Scatter(
+            x=fpr_rf, y=tpr_rf,
+            mode='lines',
+            name='Random Forest (AUC = 0.840)',
+            line=dict(color='#34d399')
+        ))
+
+        fig.add_trace(go.Scatter(
+            x=fpr_xgb, y=tpr_xgb,
+            mode='lines',
+            name='XGBoost (AUC = 0.839)',
+            line=dict(color='#a78bfa', width=3)
+        ))
 
         fig.update_layout(
-            paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)',
-            xaxis=dict(title='False Positive Rate', color='#94a3b8', gridcolor='#1e1e3f', showgrid=True),
-            yaxis=dict(title='True Positive Rate', color='#94a3b8', gridcolor='#1e1e3f', showgrid=True),
-            legend=dict(font=dict(color='#e2e8f0', size=10), bgcolor='rgba(0,0,0,0)'),
+            paper_bgcolor='rgba(0,0,0,0)',
+            plot_bgcolor='rgba(0,0,0,0)',
+            xaxis=dict(
+                title='False Positive Rate',
+                color='#94a3b8',
+                gridcolor='#1e1e3f',
+                showgrid=True
+            ),
+            yaxis=dict(
+                title='True Positive Rate',
+                color='#94a3b8',
+                gridcolor='#1e1e3f',
+                showgrid=True
+            ),
+            legend=dict(
+                font=dict(color='#e2e8f0', size=10),
+                bgcolor='rgba(0,0,0,0)'
+            ),
             margin=dict(t=20, b=40, l=40, r=20),
             height=350
         )
-        st.plotly_chart(fig, use_container_width=True)
 
+        st.plotly_chart(fig, use_container_width=True)
     with col2:
         st.markdown('<div class="section-header">Confusion Matrix (XGBoost)</div>', unsafe_allow_html=True)
         cm = np.array([[743, 293], [56, 317]])
