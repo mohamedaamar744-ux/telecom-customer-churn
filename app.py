@@ -883,7 +883,7 @@ def model_performance_page():
 
     # Model Comparison Table
     st.markdown('<div class="section-header">Model Comparison</div>', unsafe_allow_html=True)
-   comparison_data = {
+    comparison_data = {
     'Model': ['Logistic Regression', 'Decision Tree', 'Random Forest', 'XGBoost'],
     'Accuracy': ['75.09%', '74.10%', '78.92%', '76.93%'],
     'Precision (Yes)': [0.518, 0.511, 0.593, 0.552],
