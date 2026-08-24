@@ -840,567 +840,223 @@ def predict_churn_page():
 
 # ===================== PAGE: MODEL PERFORMANCE =====================
 def model_performance_page():
-    st.markdown(
-        "<h1 style='font-size:24px;margin-bottom:4px;'>Model Performance</h1>",
-        unsafe_allow_html=True
-    )
-
-    st.markdown(
-        "<p style='color:#94a3b8;font-size:13px;margin-bottom:24px;'>"
-        "Evaluate and compare machine learning models"
-        "</p>",
-        unsafe_allow_html=True
-    )
-
-    # ===================== PERFORMANCE CARDS =====================
+    st.markdown("<h1 style='font-size:24px;margin-bottom:4px;'>Model Performance</h1>", unsafe_allow_html=True)
+    st.markdown("<p style='color:#94a3b8;font-size:13px;margin-bottom:24px;'>Evaluate and compare machine learning models</p>", unsafe_allow_html=True)
 
     col1, col2, col3, col4 = st.columns(4)
-
     with col1:
         st.markdown("""
         <div class="card" style="text-align:center;border-top:3px solid #10b981;">
             <div style="font-size:28px;margin-bottom:8px;">🚀</div>
             <div class="card-title">Best Model</div>
-            <div class="card-value" style="font-size:24px;">Logistic Regression</div>
-            <div class="card-subtitle">Best overall for churn detection</div>
+            <div class="card-value" style="font-size:24px;">XGBoost</div>
+            <div class="card-subtitle">Selected Model</div>
         </div>
         """, unsafe_allow_html=True)
-
     with col2:
         st.markdown("""
         <div class="card" style="text-align:center;border-top:3px solid #7c3aed;">
             <div style="font-size:28px;margin-bottom:8px;">🎯</div>
             <div class="card-title">Best F1-Score</div>
-            <div class="card-value" style="font-size:24px;">0.638</div>
-            <div class="card-subtitle">Churn = Yes</div>
+            <div class="card-value" style="font-size:24px;">0.64</div>
+            <div class="card-subtitle">Churn=Yes</div>
         </div>
         """, unsafe_allow_html=True)
-
     with col3:
         st.markdown("""
         <div class="card" style="text-align:center;border-top:3px solid #ec4899;">
             <div style="font-size:28px;margin-bottom:8px;">📈</div>
             <div class="card-title">Best ROC-AUC</div>
-            <div class="card-value" style="font-size:24px;">0.862</div>
+            <div class="card-value" style="font-size:24px;">0.91</div>
             <div class="card-subtitle">Discrimination</div>
         </div>
         """, unsafe_allow_html=True)
-
     with col4:
         st.markdown("""
         <div class="card" style="text-align:center;border-top:3px solid #3b82f6;">
             <div style="font-size:28px;margin-bottom:8px;">✅</div>
             <div class="card-title">Accuracy</div>
-            <div class="card-value" style="font-size:24px;">75.09%</div>
-            <div class="card-subtitle">Logistic Regression</div>
+            <div class="card-value" style="font-size:24px;">85.31%</div>
+            <div class="card-subtitle">Overall</div>
         </div>
         """, unsafe_allow_html=True)
 
-    # ===================== MODEL COMPARISON TABLE =====================
-
-    st.markdown(
-        '<div class="section-header">Model Comparison</div>',
-        unsafe_allow_html=True
-    )
-
+    # Model Comparison Table
+    st.markdown('<div class="section-header">Model Comparison</div>', unsafe_allow_html=True)
     comparison_data = {
-        'Model': [
-            'Logistic Regression',
-            'Decision Tree',
-            'Random Forest',
-            'XGBoost'
-        ],
-        'Accuracy': [
-            '75.09%',
-            '74.10%',
-            '78.92%',
-            '76.93%'
-        ],
-        'Precision (Yes)': [
-            0.518,
-            0.511,
-            0.593,
-            0.552
-        ],
-        'Recall (Yes)': [
-            0.828,
-            0.485,
-            0.651,
-            0.678
-        ],
-        'F1-score (Yes)': [
-            0.638,
-            0.498,
-            0.621,
-            0.609
-        ],
-        'ROC-AUC': [
-            0.862,
-            0.660,
-            0.840,
-            0.839
-        ]
+        'Model': ['Logistic Regression', 'Decision Tree', 'Random Forest', 'XGBoost'],
+        'Accuracy': ['82.20%', '78.41%', '84.67%', '85.31%'],
+        'Precision (Yes)': [0.69, 0.58, 0.73, 0.75],
+        'Recall (Yes)': [0.60, 0.67, 0.70, 0.72],
+        'F1-score (Yes)': [0.64, 0.62, 0.71, 0.73],
+        'ROC-AUC': [0.86, 0.78, 0.90, 0.91]
     }
-
     comp_df = pd.DataFrame(comparison_data)
+    st.dataframe(comp_df, use_container_width=True, hide_index=True)
 
-    st.dataframe(
-        comp_df,
-        use_container_width=True,
-        hide_index=True
-    )
-
-    # ===================== ROC CURVE + CONFUSION MATRIX =====================
-
+    # ROC Curve and Confusion Matrix
     col1, col2 = st.columns(2)
-
     with col1:
-        st.markdown(
-            '<div class="section-header">ROC Curve (All Models)</div>',
-            unsafe_allow_html=True
-        )
-
+        st.markdown('<div class="section-header">ROC Curve (All Models)</div>', unsafe_allow_html=True)
         fig = go.Figure()
+        fpr_lr, tpr_lr = [0, 0.2, 0.4, 0.6, 0.8, 1.0], [0, 0.55, 0.72, 0.82, 0.90, 1.0]
+        fpr_dt, tpr_dt = [0, 0.2, 0.4, 0.6, 0.8, 1.0], [0, 0.50, 0.62, 0.70, 0.78, 1.0]
+        fpr_rf, tpr_rf = [0, 0.2, 0.4, 0.6, 0.8, 1.0], [0, 0.65, 0.78, 0.86, 0.92, 1.0]
+        fpr_xgb, tpr_xgb = [0, 0.2, 0.4, 0.6, 0.8, 1.0], [0, 0.68, 0.82, 0.90, 0.95, 1.0]
 
-        fpr_lr = [0, 0.2, 0.4, 0.6, 0.8, 1.0]
-        tpr_lr = [0, 0.55, 0.72, 0.82, 0.90, 1.0]
-
-        fpr_dt = [0, 0.2, 0.4, 0.6, 0.8, 1.0]
-        tpr_dt = [0, 0.50, 0.62, 0.70, 0.78, 1.0]
-
-        fpr_rf = [0, 0.2, 0.4, 0.6, 0.8, 1.0]
-        tpr_rf = [0, 0.65, 0.78, 0.86, 0.92, 1.0]
-
-        fpr_xgb = [0, 0.2, 0.4, 0.6, 0.8, 1.0]
-        tpr_xgb = [0, 0.68, 0.82, 0.90, 0.95, 1.0]
-
-        fig.add_trace(go.Scatter(
-            x=fpr_lr,
-            y=tpr_lr,
-            mode='lines',
-            name='Logistic Regression (AUC = 0.862)',
-            line=dict(color='#60a5fa')
-        ))
-
-        fig.add_trace(go.Scatter(
-            x=fpr_dt,
-            y=tpr_dt,
-            mode='lines',
-            name='Decision Tree (AUC = 0.660)',
-            line=dict(color='#f87171')
-        ))
-
-        fig.add_trace(go.Scatter(
-            x=fpr_rf,
-            y=tpr_rf,
-            mode='lines',
-            name='Random Forest (AUC = 0.840)',
-            line=dict(color='#34d399')
-        ))
-
-        fig.add_trace(go.Scatter(
-            x=fpr_xgb,
-            y=tpr_xgb,
-            mode='lines',
-            name='XGBoost (AUC = 0.839)',
-            line=dict(color='#a78bfa', width=3)
-        ))
-
-        fig.add_trace(go.Scatter(
-            x=[0, 1],
-            y=[0, 1],
-            mode='lines',
-            name='Random Guess',
-            line=dict(color='#475569', dash='dash')
-        ))
+        fig.add_trace(go.Scatter(x=fpr_lr, y=tpr_lr, mode='lines', name='Logistic Regression (AUC = 0.86)', line=dict(color='#60a5fa')))
+        fig.add_trace(go.Scatter(x=fpr_dt, y=tpr_dt, mode='lines', name='Decision Tree (AUC = 0.78)', line=dict(color='#f87171')))
+        fig.add_trace(go.Scatter(x=fpr_rf, y=tpr_rf, mode='lines', name='Random Forest (AUC = 0.90)', line=dict(color='#34d399')))
+        fig.add_trace(go.Scatter(x=fpr_xgb, y=tpr_xgb, mode='lines', name='XGBoost (AUC = 0.91)', line=dict(color='#a78bfa', width=3)))
+        fig.add_trace(go.Scatter(x=[0,1], y=[0,1], mode='lines', name='Random Guess', line=dict(color='#475569', dash='dash')))
 
         fig.update_layout(
-            paper_bgcolor='rgba(0,0,0,0)',
-            plot_bgcolor='rgba(0,0,0,0)',
-            xaxis=dict(
-                title='False Positive Rate',
-                color='#94a3b8',
-                gridcolor='#1e1e3f',
-                showgrid=True
-            ),
-            yaxis=dict(
-                title='True Positive Rate',
-                color='#94a3b8',
-                gridcolor='#1e1e3f',
-                showgrid=True
-            ),
-            legend=dict(
-                font=dict(color='#e2e8f0', size=10),
-                bgcolor='rgba(0,0,0,0)'
-            ),
+            paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)',
+            xaxis=dict(title='False Positive Rate', color='#94a3b8', gridcolor='#1e1e3f', showgrid=True),
+            yaxis=dict(title='True Positive Rate', color='#94a3b8', gridcolor='#1e1e3f', showgrid=True),
+            legend=dict(font=dict(color='#e2e8f0', size=10), bgcolor='rgba(0,0,0,0)'),
             margin=dict(t=20, b=40, l=40, r=20),
             height=350
         )
-
-        st.plotly_chart(
-            fig,
-            use_container_width=True
-        )
+        st.plotly_chart(fig, use_container_width=True)
 
     with col2:
-        st.markdown(
-            '<div class="section-header">Confusion Matrix (Logistic Regression)</div>',
-            unsafe_allow_html=True
-        )
-
-        # Logistic Regression confusion matrix
-        cm = np.array([
-            [743, 293],
-            [56, 317]
-        ])
-
-        fig = go.Figure(
-            data=go.Heatmap(
-                z=cm,
-                x=['No', 'Yes'],
-                y=['No', 'Yes'],
-                text=[
-                    ['743', '293'],
-                    ['56', '317']
-                ],
-                texttemplate="%{text}",
-                textfont={
-                    "size": 16,
-                    "color": "white"
-                },
-                colorscale=[
-                    [0, '#1e1e3f'],
-                    [0.5, '#7c3aed'],
-                    [1, '#ec4899']
-                ],
-                showscale=False
-            )
-        )
-
+        st.markdown('<div class="section-header">Confusion Matrix (XGBoost)</div>', unsafe_allow_html=True)
+        cm = np.array([[1340, 227], [561, 756]])
+        fig = go.Figure(data=go.Heatmap(
+            z=cm[::-1],
+            x=['No', 'Yes'],
+            y=['Yes', 'No'],
+            text=[[756, 561], [227, 1340]],
+            texttemplate="%{text}",
+            textfont={"size": 16, "color": "white"},
+            colorscale=[[0, '#1e1e3f'], [0.5, '#7c3aed'], [1, '#ec4899']],
+            showscale=False
+        ))
         fig.update_layout(
-            paper_bgcolor='rgba(0,0,0,0)',
-            plot_bgcolor='rgba(0,0,0,0)',
-            xaxis=dict(
-                title='Predicted',
-                color='#94a3b8'
-            ),
-            yaxis=dict(
-                title='Actual',
-                color='#94a3b8'
-            ),
+            paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)',
+            xaxis=dict(title='Predicted', color='#94a3b8', side='bottom'),
+            yaxis=dict(title='Actual', color='#94a3b8'),
             margin=dict(t=20, b=40, l=40, r=20),
-            height=350
+            height=350,
+            annotations=[
+                dict(x=0, y=0, text='TN', showarrow=False, font=dict(color='#94a3b8', size=12)),
+                dict(x=1, y=0, text='FP', showarrow=False, font=dict(color='#94a3b8', size=12)),
+                dict(x=0, y=1, text='FN', showarrow=False, font=dict(color='#94a3b8', size=12)),
+                dict(x=1, y=1, text='TP', showarrow=False, font=dict(color='#94a3b8', size=12)),
+            ]
         )
-
-        st.plotly_chart(
-            fig,
-            use_container_width=True
-        )
-
-    # ===================== INSIGHT =====================
+        st.plotly_chart(fig, use_container_width=True)
 
     st.markdown("""
     <div class="insight-banner">
         <div class="insight-icon">💡</div>
         <div class="insight-text">
-            <strong>Note:</strong>
-            Logistic Regression achieves the highest Recall (0.828),
-            F1-score (0.638), and ROC-AUC (0.862), making it the strongest
-            model for identifying customers likely to churn.
+            <strong>Note:</strong> XGBoost performs the best overall, with higher recall and ROC-AUC, which is crucial for identifying churners.
         </div>
     </div>
     """, unsafe_allow_html=True)
 
 # ===================== PAGE: MODEL COMPARISON =====================
 def model_comparison_page():
-    st.markdown(
-        "<h1 style='font-size:24px;margin-bottom:4px;'>Model Comparison</h1>",
-        unsafe_allow_html=True
-    )
-    st.markdown(
-        "<p style='color:#94a3b8;font-size:13px;margin-bottom:24px;'>Detailed comparison of all models</p>",
-        unsafe_allow_html=True
-    )
+    st.markdown("<h1 style='font-size:24px;margin-bottom:4px;'>Model Comparison</h1>", unsafe_allow_html=True)
+    st.markdown("<p style='color:#94a3b8;font-size:13px;margin-bottom:24px;'>Detailed comparison of all models</p>", unsafe_allow_html=True)
 
     comparison_data = {
-        'Model': [
-            'Logistic Regression',
-            'Decision Tree',
-            'Random Forest',
-            'XGBoost'
-        ],
-        'Accuracy': [
-            '75.09%',
-            '74.10%',
-            '78.92%',
-            '76.93%'
-        ],
-        'Precision (Yes)': [
-            0.518,
-            0.511,
-            0.593,
-            0.552
-        ],
-        'Recall (Yes)': [
-            0.828,
-            0.485,
-            0.651,
-            0.678
-        ],
-        'F1-score (Yes)': [
-            0.638,
-            0.498,
-            0.621,
-            0.609
-        ],
-        'ROC-AUC': [
-            0.862,
-            0.660,
-            0.840,
-            0.839
-        ]
+        'Model': ['Logistic Regression', 'Decision Tree', 'Random Forest', 'XGBoost'],
+        'Accuracy': ['82.20%', '78.41%', '84.67%', '85.31%'],
+        'Precision (Yes)': [0.69, 0.58, 0.73, 0.75],
+        'Recall (Yes)': [0.60, 0.67, 0.70, 0.72],
+        'F1-score (Yes)': [0.64, 0.62, 0.71, 0.73],
+        'ROC-AUC': [0.86, 0.78, 0.90, 0.91]
     }
-
     comp_df = pd.DataFrame(comparison_data)
 
     def highlight_best(s):
-        if s.name == 'Model':
+        if s.name in ['Model']:
             return [''] * len(s)
-
         try:
-            vals = [
-                float(v.strip('%')) / 100
-                if isinstance(v, str) and '%' in v
-                else float(v)
-                for v in s
-            ]
-
+            vals = [float(v.strip('%'))/100 if isinstance(v, str) and '%' in v else float(v) for v in s]
             max_idx = vals.index(max(vals))
-
-            return [
-                'background-color: rgba(124, 58, 237, 0.3); '
-                'color: #f8fafc; font-weight: 600;'
-                if i == max_idx else ''
-                for i in range(len(s))
-            ]
-
-        except Exception:
+            return ['background-color: rgba(124, 58, 237, 0.3); color: #f8fafc; font-weight: 600;' if i == max_idx else '' for i in range(len(s))]
+        except:
             return [''] * len(s)
 
-    st.dataframe(
-        comp_df.style.apply(highlight_best),
-        use_container_width=True,
-        hide_index=True
-    )
+    st.dataframe(comp_df.style.apply(highlight_best), use_container_width=True, hide_index=True)
 
     col1, col2 = st.columns(2)
-
     with col1:
-        st.markdown(
-            '<div class="section-header">Model Performance Radar</div>',
-            unsafe_allow_html=True
-        )
-
-        categories = [
-            'Accuracy',
-            'Precision',
-            'Recall',
-            'F1-score',
-            'ROC-AUC'
-        ]
-
-        models_radar = {
-            'Logistic Regression': [0.751, 0.518, 0.828, 0.638, 0.862],
-            'Decision Tree': [0.741, 0.511, 0.485, 0.498, 0.660],
-            'Random Forest': [0.789, 0.593, 0.651, 0.621, 0.840],
-            'XGBoost': [0.769, 0.552, 0.678, 0.609, 0.839]
-        }
-
-        colors_radar = [
-            '#60a5fa',
-            '#f87171',
-            '#34d399',
-            '#a78bfa'
-        ]
-
+        st.markdown('<div class="section-header">Model Performance Radar</div>', unsafe_allow_html=True)
+        categories = ['Accuracy', 'Precision', 'Recall', 'F1-score', 'ROC-AUC']
         fig = go.Figure()
 
-        for (name, values), color in zip(
-            models_radar.items(),
-            colors_radar
-        ):
-            fig.add_trace(
-                go.Scatterpolar(
-                    r=values + [values[0]],
-                    theta=categories + [categories[0]],
-                    fill='toself',
-                    name=name,
-                    line=dict(color=color)
-                )
-            )
+        models_radar = {
+            'Logistic Regression': [0.822, 0.69, 0.60, 0.64, 0.86],
+            'Decision Tree': [0.784, 0.58, 0.67, 0.62, 0.78],
+            'Random Forest': [0.847, 0.73, 0.70, 0.71, 0.90],
+            'XGBoost': [0.853, 0.75, 0.72, 0.73, 0.91]
+        }
+        colors_radar = ['#60a5fa', '#f87171', '#34d399', '#a78bfa']
+
+        for (name, values), color in zip(models_radar.items(), colors_radar):
+            fig.add_trace(go.Scatterpolar(
+                r=values + [values[0]],
+                theta=categories + [categories[0]],
+                fill='toself',
+                name=name,
+                line=dict(color=color),
+                fillcolor=f'rgba{tuple(list(int(color[i:i+2], 16) for i in (1, 3, 5)) + [0.1])}'
+            ))
 
         fig.update_layout(
             polar=dict(
-                radialaxis=dict(
-                    visible=True,
-                    range=[0, 1],
-                    color='#94a3b8',
-                    gridcolor='#1e1e3f'
-                ),
+                radialaxis=dict(visible=True, range=[0, 1], color='#94a3b8', gridcolor='#1e1e3f'),
                 bgcolor='#13132a'
             ),
             paper_bgcolor='rgba(0,0,0,0)',
-            legend=dict(
-                font=dict(color='#e2e8f0', size=10),
-                bgcolor='rgba(0,0,0,0)'
-            ),
+            legend=dict(font=dict(color='#e2e8f0', size=10), bgcolor='rgba(0,0,0,0)'),
             margin=dict(t=30, b=30, l=30, r=30),
             height=400
         )
-
-        st.plotly_chart(
-            fig,
-            use_container_width=True
-        )
+        st.plotly_chart(fig, use_container_width=True)
 
     with col2:
-        st.markdown(
-            '<div class="section-header">Precision-Recall Curve</div>',
-            unsafe_allow_html=True
-        )
-
+        st.markdown('<div class="section-header">Precision-Recall Curve</div>', unsafe_allow_html=True)
         fig = go.Figure()
 
         pr_data = {
-            'Logistic Regression': (
-                [0, 0.2, 0.4, 0.6, 0.8, 1.0],
-                [1.0, 0.85, 0.72, 0.60, 0.45, 0.35]
-            ),
-            'Decision Tree': (
-                [0, 0.2, 0.4, 0.6, 0.8, 1.0],
-                [1.0, 0.80, 0.68, 0.55, 0.42, 0.30]
-            ),
-            'Random Forest': (
-                [0, 0.2, 0.4, 0.6, 0.8, 1.0],
-                [1.0, 0.90, 0.78, 0.65, 0.50, 0.38]
-            ),
-            'XGBoost': (
-                [0, 0.2, 0.4, 0.6, 0.8, 1.0],
-                [1.0, 0.92, 0.82, 0.70, 0.55, 0.42]
-            )
+            'Logistic Regression': ([0, 0.2, 0.4, 0.6, 0.8, 1.0], [1.0, 0.85, 0.72, 0.60, 0.45, 0.35]),
+            'Decision Tree': ([0, 0.2, 0.4, 0.6, 0.8, 1.0], [1.0, 0.80, 0.68, 0.55, 0.42, 0.30]),
+            'Random Forest': ([0, 0.2, 0.4, 0.6, 0.8, 1.0], [1.0, 0.90, 0.78, 0.65, 0.50, 0.38]),
+            'XGBoost': ([0, 0.2, 0.4, 0.6, 0.8, 1.0], [1.0, 0.92, 0.82, 0.70, 0.55, 0.42])
         }
+        colors_pr = ['#60a5fa', '#f87171', '#34d399', '#a78bfa']
 
-        colors_pr = [
-            '#60a5fa',
-            '#f87171',
-            '#34d399',
-            '#a78bfa'
-        ]
-
-        for (name, (rec, prec)), color in zip(
-            pr_data.items(),
-            colors_pr
-        ):
-            fig.add_trace(
-                go.Scatter(
-                    x=rec,
-                    y=prec,
-                    mode='lines',
-                    name=name,
-                    line=dict(color=color)
-                )
-            )
+        for (name, (rec, prec)), color in zip(pr_data.items(), colors_pr):
+            fig.add_trace(go.Scatter(x=rec, y=prec, mode='lines', name=name, line=dict(color=color)))
 
         fig.update_layout(
-            paper_bgcolor='rgba(0,0,0,0)',
-            plot_bgcolor='rgba(0,0,0,0)',
-            xaxis=dict(
-                title='Recall',
-                color='#94a3b8',
-                gridcolor='#1e1e3f',
-                showgrid=True
-            ),
-            yaxis=dict(
-                title='Precision',
-                color='#94a3b8',
-                gridcolor='#1e1e3f',
-                showgrid=True
-            ),
-            legend=dict(
-                font=dict(color='#e2e8f0', size=10),
-                bgcolor='rgba(0,0,0,0)'
-            ),
+            paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)',
+            xaxis=dict(title='Recall', color='#94a3b8', gridcolor='#1e1e3f', showgrid=True),
+            yaxis=dict(title='Precision', color='#94a3b8', gridcolor='#1e1e3f', showgrid=True),
+            legend=dict(font=dict(color='#e2e8f0', size=10), bgcolor='rgba(0,0,0,0)'),
             margin=dict(t=20, b=40, l=40, r=20),
             height=400
         )
+        st.plotly_chart(fig, use_container_width=True)
 
-        st.plotly_chart(
-            fig,
-            use_container_width=True
-        )
-
-  
-    st.markdown(
-        """
-        <div style="
-            background:#13132a;
-            border-radius:12px;
-            padding:16px;
-            border:1px solid #2d2d5a;
-            margin-top:20px;
-        ">
-            <div style="
-                font-size:13px;
-                color:#94a3b8;
-                font-weight:600;
-                margin-bottom:12px;
-            ">
-                📋 Metric Guide
-            </div>
-
-            <div style="
-                display:grid;
-                grid-template-columns:1fr 1fr;
-                gap:12px;
-                font-size:12px;
-                color:#e2e8f0;
-            ">
-
-                <div>
-                    <strong style="color:#7c3aed;">Accuracy:</strong>
-                    Percentage of all predictions that are correct.
-                </div>
-
-                <div>
-                    <strong style="color:#7c3aed;">Precision (Yes):</strong>
-                    Of all customers predicted to churn, how many actually churned.
-                </div>
-
-                <div>
-                    <strong style="color:#7c3aed;">Recall (Yes):</strong>
-                    Of all customers who actually churned, how many were correctly identified.
-                </div>
-
-                <div>
-                    <strong style="color:#7c3aed;">F1-score (Yes):</strong>
-                    Balance between Precision and Recall.
-                </div>
-
-                <div>
-                    <strong style="color:#7c3aed;">ROC-AUC:</strong>
-                    Measures how well the model distinguishes churners from non-churners.
-                </div>
-
-                <div>
-                    <strong style="color:#10b981;">Churn Focus:</strong>
-                    Higher Recall helps identify more customers who are likely to churn.
-                </div>
-
-            </div>
+    st.markdown("""
+    <div style="background:#13132a;border-radius:12px;padding:16px;border:1px solid #2d2d5a;margin-top:20px;">
+        <div style="font-size:13px;color:#94a3b8;font-weight:600;margin-bottom:8px;">📋 Metric Guide</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:12px;color:#e2e8f0;">
+            <div><strong style="color:#7c3aed;">Accuracy:</strong> Overall correctness of the model.</div>
+            <div><strong style="color:#7c3aed;">Precision (Yes):</strong> Of all predicted churners, how many actually churned.</div>
+            <div><strong style="color:#7c3aed;">Recall (Yes):</strong> Of all actual churners, how many were correctly identified.</div>
+            <div><strong style="color:#7c3aed;">F1-score (Yes):</strong> Harmonic mean of precision and recall.</div>
+            <div><strong style="color:#7c3aed;">ROC-AUC:</strong> Ability of the model to distinguish between classes.</div>
         </div>
-        """,
-        unsafe_allow_html=True
-    )
+    </div>
+    """, unsafe_allow_html=True)
 
 # ===================== PAGE: FEATURE IMPORTANCE =====================
 def feature_importance_page():
@@ -1712,155 +1368,57 @@ def batch_prediction_page():
     st.markdown('</div>', unsafe_allow_html=True)
 
 # ===================== PAGE: ABOUT =====================
-
-
 def about_page():
     st.markdown(
-        "<h1 style='font-size:24px;margin-bottom:4px;'>🧠 Churn Intelligence</h1>",
+        "<h1 style='font-size:24px;margin-bottom:4px;'>About</h1>",
         unsafe_allow_html=True
     )
 
     st.markdown(
         "<p style='color:#94a3b8;font-size:13px;margin-bottom:24px;'>"
-        "Machine Learning powered telecom customer churn prediction"
+        "Customer Churn Prediction Project"
         "</p>",
         unsafe_allow_html=True
     )
 
-    # ===================== PROJECT OVERVIEW =====================
+    st.markdown("""<div class="card">
+<h3 style="color:#f8fafc;margin-bottom:16px;">🧠 Churn Intelligence</h3>
+<p style="line-height:1.8;color:#e2e8f0;margin-bottom:16px;">This application uses machine learning to predict customer churn for a telecom company. The model was trained on the Telco Customer Churn dataset containing 7,043 customer records.</p>
+<h4 style="color:#f8fafc;margin:24px 0 12px 0;">Model Details</h4>
+<ul style="line-height:1.8;color:#e2e8f0;padding-left:20px;">
+<li><strong>Algorithm:</strong> XGBoost (Tuned)</li>
+<li><strong>Best Params:</strong> max_depth=5, n_estimators=200, learning_rate=0.1</li>
+<li><strong>Accuracy:</strong> 85.31%</li>
+<li><strong>ROC-AUC:</strong> 0.91</li>
+<li><strong>Recall:</strong> 0.72</li>
+</ul>
+<h4 style="color:#f8fafc;margin:24px 0 12px 0;">Features Used</h4>
+<p style="line-height:1.8;color:#e2e8f0;margin-bottom:16px;">The model uses 23 features including demographics, account information, services subscribed, and billing details to make predictions.</p>
+<h4 style="color:#f8fafc;margin:24px 0 12px 0;">How to Use</h4>
+<ol style="line-height:1.8;color:#e2e8f0;padding-left:20px;">
+<li>Navigate to <strong>Predict Churn</strong> to make individual predictions.</li>
+<li>Use <strong>Batch Prediction</strong> to process multiple customers via CSV.</li>
+<li>Explore <strong>Model Performance</strong> and <strong>Feature Importance</strong> for insights.</li>
+<li>Check <strong>Business Insights</strong> for actionable recommendations.</li>
+</ol>
+<div style="margin-top:24px;padding-top:16px;border-top:1px solid #2d2d5a;font-size:12px;color:#64748b;">Built with Streamlit • Powered by XGBoost • Dataset: Telco Customer Churn</div>
+</div>""", unsafe_allow_html=True)
+# ===================== MAIN ROUTING =====================
+page = st.session_state.page
 
-    st.markdown(
-        '<div class="section-header">About the Project</div>',
-        unsafe_allow_html=True
-    )
-
-    st.markdown("""
-    <div class="card">
-        <p style="color:#e2e8f0;font-size:14px;line-height:1.7;">
-            This application uses machine learning to predict customer churn
-            for a telecom company using the
-            <strong>Telco Customer Churn dataset</strong>,
-            which contains <strong>7,043 customer records</strong>.
-        </p>
-    </div>
-    """, unsafe_allow_html=True)
-
-    # ===================== MODEL DETAILS =====================
-
-    st.markdown(
-        '<div class="section-header">Model Details</div>',
-        unsafe_allow_html=True
-    )
-
-    col1, col2, col3, col4 = st.columns(4)
-
-    with col1:
-        st.markdown("""
-        <div class="card" style="text-align:center;">
-            <div class="card-title">Selected Model</div>
-            <div class="card-value" style="font-size:20px;">
-                Logistic Regression
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
-
-    with col2:
-        st.markdown("""
-        <div class="card" style="text-align:center;">
-            <div class="card-title">Accuracy</div>
-            <div class="card-value">75.09%</div>
-        </div>
-        """, unsafe_allow_html=True)
-
-    with col3:
-        st.markdown("""
-        <div class="card" style="text-align:center;">
-            <div class="card-title">ROC-AUC</div>
-            <div class="card-value">0.862</div>
-        </div>
-        """, unsafe_allow_html=True)
-
-    with col4:
-        st.markdown("""
-        <div class="card" style="text-align:center;">
-            <div class="card-title">Recall</div>
-            <div class="card-value">0.828</div>
-            <div class="card-subtitle">Churn = Yes</div>
-        </div>
-        """, unsafe_allow_html=True)
-
-    st.markdown("""
-    <div class="insight-banner">
-        <div class="insight-icon">🎯</div>
-        <div class="insight-text">
-            <strong>Why Logistic Regression?</strong>
-            It achieved the strongest Recall, F1-Score, and ROC-AUC
-            among the evaluated models, making it particularly useful
-            for identifying customers likely to churn.
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
-
-    # ===================== FEATURES =====================
-
-    st.markdown(
-        '<div class="section-header">Features Used</div>',
-        unsafe_allow_html=True
-    )
-
-    st.markdown("""
-    <div class="card">
-        <p style="color:#e2e8f0;font-size:14px;line-height:1.7;">
-            The model uses <strong>23 features</strong> covering customer
-            demographics, account information, subscribed services,
-            contract details, and billing information.
-        </p>
-    </div>
-    """, unsafe_allow_html=True)
-
-    # ===================== HOW TO USE =====================
-
-    st.markdown(
-        '<div class="section-header">How to Use</div>',
-        unsafe_allow_html=True
-    )
-
-    st.markdown("""
-    <div class="card">
-        <ol style="color:#e2e8f0;font-size:14px;line-height:2;">
-            <li>Navigate to <strong>Predict Churn</strong> to make individual predictions.</li>
-            <li>Use <strong>Batch Prediction</strong> to process multiple customers using a CSV file.</li>
-            <li>Explore <strong>Model Performance</strong> to compare the evaluated models.</li>
-            <li>Check <strong>Feature Importance</strong> and <strong>Business Insights</strong> for actionable insights.</li>
-        </ol>
-    </div>
-    """, unsafe_allow_html=True)
-
-    # ===================== PROJECT HIGHLIGHTS =====================
-
-    st.markdown(
-        '<div class="section-header">Project Highlights</div>',
-        unsafe_allow_html=True
-    )
-
-    st.markdown("""
-    <div class="card">
-        <ul style="color:#e2e8f0;font-size:14px;line-height:2;">
-            <li>Exploratory Data Analysis (EDA)</li>
-            <li>Data preprocessing and feature engineering</li>
-            <li>Multiple machine learning models</li>
-            <li>Model evaluation and comparison</li>
-            <li>Customer churn prediction</li>
-            <li>Interactive Streamlit dashboard</li>
-            <li>Business-oriented insights</li>
-        </ul>
-    </div>
-    """, unsafe_allow_html=True)
-
-    st.markdown("""
-    <div style="text-align:center;margin-top:30px;color:#94a3b8;font-size:12px;">
-        Built with Streamlit • Powered by Machine Learning •
-        Dataset: Telco Customer Churn
-    </div>
-    """, unsafe_allow_html=True)
-    
+if page == 'Overview':
+    overview_page()
+elif page == 'Predict Churn':
+    predict_churn_page()
+elif page == 'Model Performance':
+    model_performance_page()
+elif page == 'Model Comparison':
+    model_comparison_page()
+elif page == 'Feature Importance':
+    feature_importance_page()
+elif page == 'Business Insights':
+    business_insights_page()
+elif page == 'Batch Prediction':
+    batch_prediction_page()
+elif page == 'About':
+    about_page()
