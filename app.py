@@ -1339,7 +1339,7 @@ def model_comparison_page():
             use_container_width=True
         )
 
-  ```python
+  
 st.markdown("""
 <div style="
     background:#13132a;
