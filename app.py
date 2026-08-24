@@ -1112,104 +1112,274 @@ def model_performance_page():
     """, unsafe_allow_html=True)
 # ===================== PAGE: MODEL COMPARISON =====================
 def model_comparison_page():
-    st.markdown("<h1 style='font-size:24px;margin-bottom:4px;'>Model Comparison</h1>", unsafe_allow_html=True)
-    st.markdown("<p style='color:#94a3b8;font-size:13px;margin-bottom:24px;'>Detailed comparison of all models</p>", unsafe_allow_html=True)
+    st.markdown(
+        "<h1 style='font-size:24px;margin-bottom:4px;'>Model Comparison</h1>",
+        unsafe_allow_html=True
+    )
+    st.markdown(
+        "<p style='color:#94a3b8;font-size:13px;margin-bottom:24px;'>Detailed comparison of all models</p>",
+        unsafe_allow_html=True
+    )
 
     comparison_data = {
-        'Model': ['Logistic Regression', 'Decision Tree', 'Random Forest', 'XGBoost'],
-        'Accuracy': ['82.20%', '78.41%', '84.67%', '85.31%'],
-        'Precision (Yes)': [0.69, 0.58, 0.73, 0.75],
-        'Recall (Yes)': [0.60, 0.67, 0.70, 0.72],
-        'F1-score (Yes)': [0.64, 0.62, 0.71, 0.73],
-        'ROC-AUC': [0.86, 0.78, 0.90, 0.91]
+        'Model': [
+            'Logistic Regression',
+            'Decision Tree',
+            'Random Forest',
+            'XGBoost'
+        ],
+        'Accuracy': [
+            '75.09%',
+            '74.10%',
+            '78.92%',
+            '76.93%'
+        ],
+        'Precision (Yes)': [
+            0.518,
+            0.511,
+            0.593,
+            0.552
+        ],
+        'Recall (Yes)': [
+            0.828,
+            0.485,
+            0.651,
+            0.678
+        ],
+        'F1-score (Yes)': [
+            0.638,
+            0.498,
+            0.621,
+            0.609
+        ],
+        'ROC-AUC': [
+            0.862,
+            0.660,
+            0.840,
+            0.839
+        ]
     }
+
     comp_df = pd.DataFrame(comparison_data)
 
     def highlight_best(s):
-        if s.name in ['Model']:
-            return [''] * len(s)
-        try:
-            vals = [float(v.strip('%'))/100 if isinstance(v, str) and '%' in v else float(v) for v in s]
-            max_idx = vals.index(max(vals))
-            return ['background-color: rgba(124, 58, 237, 0.3); color: #f8fafc; font-weight: 600;' if i == max_idx else '' for i in range(len(s))]
-        except:
+        if s.name == 'Model':
             return [''] * len(s)
 
-    st.dataframe(comp_df.style.apply(highlight_best), use_container_width=True, hide_index=True)
+        try:
+            vals = [
+                float(v.strip('%')) / 100
+                if isinstance(v, str) and '%' in v
+                else float(v)
+                for v in s
+            ]
+
+            max_idx = vals.index(max(vals))
+
+            return [
+                'background-color: rgba(124, 58, 237, 0.3); '
+                'color: #f8fafc; font-weight: 600;'
+                if i == max_idx else ''
+                for i in range(len(s))
+            ]
+
+        except Exception:
+            return [''] * len(s)
+
+    st.dataframe(
+        comp_df.style.apply(highlight_best),
+        use_container_width=True,
+        hide_index=True
+    )
 
     col1, col2 = st.columns(2)
+
     with col1:
-        st.markdown('<div class="section-header">Model Performance Radar</div>', unsafe_allow_html=True)
-        categories = ['Accuracy', 'Precision', 'Recall', 'F1-score', 'ROC-AUC']
-        fig = go.Figure()
+        st.markdown(
+            '<div class="section-header">Model Performance Radar</div>',
+            unsafe_allow_html=True
+        )
+
+        categories = [
+            'Accuracy',
+            'Precision',
+            'Recall',
+            'F1-score',
+            'ROC-AUC'
+        ]
 
         models_radar = {
-            'Logistic Regression': [0.822, 0.69, 0.60, 0.64, 0.86],
-            'Decision Tree': [0.784, 0.58, 0.67, 0.62, 0.78],
-            'Random Forest': [0.847, 0.73, 0.70, 0.71, 0.90],
-            'XGBoost': [0.853, 0.75, 0.72, 0.73, 0.91]
+            'Logistic Regression': [0.751, 0.518, 0.828, 0.638, 0.862],
+            'Decision Tree': [0.741, 0.511, 0.485, 0.498, 0.660],
+            'Random Forest': [0.789, 0.593, 0.651, 0.621, 0.840],
+            'XGBoost': [0.769, 0.552, 0.678, 0.609, 0.839]
         }
-        colors_radar = ['#60a5fa', '#f87171', '#34d399', '#a78bfa']
 
-        for (name, values), color in zip(models_radar.items(), colors_radar):
-            fig.add_trace(go.Scatterpolar(
-                r=values + [values[0]],
-                theta=categories + [categories[0]],
-                fill='toself',
-                name=name,
-                line=dict(color=color),
-                fillcolor=f'rgba{tuple(list(int(color[i:i+2], 16) for i in (1, 3, 5)) + [0.1])}'
-            ))
+        colors_radar = [
+            '#60a5fa',
+            '#f87171',
+            '#34d399',
+            '#a78bfa'
+        ]
+
+        fig = go.Figure()
+
+        for (name, values), color in zip(
+            models_radar.items(),
+            colors_radar
+        ):
+            fig.add_trace(
+                go.Scatterpolar(
+                    r=values + [values[0]],
+                    theta=categories + [categories[0]],
+                    fill='toself',
+                    name=name,
+                    line=dict(color=color)
+                )
+            )
 
         fig.update_layout(
             polar=dict(
-                radialaxis=dict(visible=True, range=[0, 1], color='#94a3b8', gridcolor='#1e1e3f'),
+                radialaxis=dict(
+                    visible=True,
+                    range=[0, 1],
+                    color='#94a3b8',
+                    gridcolor='#1e1e3f'
+                ),
                 bgcolor='#13132a'
             ),
             paper_bgcolor='rgba(0,0,0,0)',
-            legend=dict(font=dict(color='#e2e8f0', size=10), bgcolor='rgba(0,0,0,0)'),
+            legend=dict(
+                font=dict(color='#e2e8f0', size=10),
+                bgcolor='rgba(0,0,0,0)'
+            ),
             margin=dict(t=30, b=30, l=30, r=30),
             height=400
         )
-        st.plotly_chart(fig, use_container_width=True)
+
+        st.plotly_chart(
+            fig,
+            use_container_width=True
+        )
 
     with col2:
-        st.markdown('<div class="section-header">Precision-Recall Curve</div>', unsafe_allow_html=True)
+        st.markdown(
+            '<div class="section-header">Precision-Recall Curve</div>',
+            unsafe_allow_html=True
+        )
+
         fig = go.Figure()
 
         pr_data = {
-            'Logistic Regression': ([0, 0.2, 0.4, 0.6, 0.8, 1.0], [1.0, 0.85, 0.72, 0.60, 0.45, 0.35]),
-            'Decision Tree': ([0, 0.2, 0.4, 0.6, 0.8, 1.0], [1.0, 0.80, 0.68, 0.55, 0.42, 0.30]),
-            'Random Forest': ([0, 0.2, 0.4, 0.6, 0.8, 1.0], [1.0, 0.90, 0.78, 0.65, 0.50, 0.38]),
-            'XGBoost': ([0, 0.2, 0.4, 0.6, 0.8, 1.0], [1.0, 0.92, 0.82, 0.70, 0.55, 0.42])
+            'Logistic Regression': (
+                [0, 0.2, 0.4, 0.6, 0.8, 1.0],
+                [1.0, 0.85, 0.72, 0.60, 0.45, 0.35]
+            ),
+            'Decision Tree': (
+                [0, 0.2, 0.4, 0.6, 0.8, 1.0],
+                [1.0, 0.80, 0.68, 0.55, 0.42, 0.30]
+            ),
+            'Random Forest': (
+                [0, 0.2, 0.4, 0.6, 0.8, 1.0],
+                [1.0, 0.90, 0.78, 0.65, 0.50, 0.38]
+            ),
+            'XGBoost': (
+                [0, 0.2, 0.4, 0.6, 0.8, 1.0],
+                [1.0, 0.92, 0.82, 0.70, 0.55, 0.42]
+            )
         }
-        colors_pr = ['#60a5fa', '#f87171', '#34d399', '#a78bfa']
 
-        for (name, (rec, prec)), color in zip(pr_data.items(), colors_pr):
-            fig.add_trace(go.Scatter(x=rec, y=prec, mode='lines', name=name, line=dict(color=color)))
+        colors_pr = [
+            '#60a5fa',
+            '#f87171',
+            '#34d399',
+            '#a78bfa'
+        ]
+
+        for (name, (rec, prec)), color in zip(
+            pr_data.items(),
+            colors_pr
+        ):
+            fig.add_trace(
+                go.Scatter(
+                    x=rec,
+                    y=prec,
+                    mode='lines',
+                    name=name,
+                    line=dict(color=color)
+                )
+            )
 
         fig.update_layout(
-            paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)',
-            xaxis=dict(title='Recall', color='#94a3b8', gridcolor='#1e1e3f', showgrid=True),
-            yaxis=dict(title='Precision', color='#94a3b8', gridcolor='#1e1e3f', showgrid=True),
-            legend=dict(font=dict(color='#e2e8f0', size=10), bgcolor='rgba(0,0,0,0)'),
+            paper_bgcolor='rgba(0,0,0,0)',
+            plot_bgcolor='rgba(0,0,0,0)',
+            xaxis=dict(
+                title='Recall',
+                color='#94a3b8',
+                gridcolor='#1e1e3f',
+                showgrid=True
+            ),
+            yaxis=dict(
+                title='Precision',
+                color='#94a3b8',
+                gridcolor='#1e1e3f',
+                showgrid=True
+            ),
+            legend=dict(
+                font=dict(color='#e2e8f0', size=10),
+                bgcolor='rgba(0,0,0,0)'
+            ),
             margin=dict(t=20, b=40, l=40, r=20),
             height=400
         )
-        st.plotly_chart(fig, use_container_width=True)
 
-    st.markdown("""
-    <div style="background:#13132a;border-radius:12px;padding:16px;border:1px solid #2d2d5a;margin-top:20px;">
-        <div style="font-size:13px;color:#94a3b8;font-weight:600;margin-bottom:8px;">📋 Metric Guide</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:12px;color:#e2e8f0;">
-            <div><strong style="color:#7c3aed;">Accuracy:</strong> Overall correctness of the model.</div>
-            <div><strong style="color:#7c3aed;">Precision (Yes):</strong> Of all predicted churners, how many actually churned.</div>
-            <div><strong style="color:#7c3aed;">Recall (Yes):</strong> Of all actual churners, how many were correctly identified.</div>
-            <div><strong style="color:#7c3aed;">F1-score (Yes):</strong> Harmonic mean of precision and recall.</div>
-            <div><strong style="color:#7c3aed;">ROC-AUC:</strong> Ability of the model to distinguish between classes.</div>
+        st.plotly_chart(
+            fig,
+            use_container_width=True
+        )
+
+    st.markdown(
+        """
+        <div style="background:#13132a;border-radius:12px;padding:16px;
+                    border:1px solid #2d2d5a;margin-top:20px;">
+            <div style="font-size:13px;color:#94a3b8;font-weight:600;
+                        margin-bottom:8px;">
+                📋 Metric Guide
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;
+                        gap:12px;font-size:12px;color:#e2e8f0;">
+
+                <div>
+                    <strong style="color:#7c3aed;">Accuracy:</strong>
+                    Overall correctness of the model.
+                </div>
+
+                <div>
+                    <strong style="color:#7c3aed;">Precision (Yes):</strong>
+                    Of all predicted churners, how many actually churned.
+                </div>
+
+                <div>
+                    <strong style="color:#7c3aed;">Recall (Yes):</strong>
+                    Of all actual churners, how many were correctly identified.
+                </div>
+
+                <div>
+                    <strong style="color:#7c3aed;">F1-score (Yes):</strong>
+                    Harmonic mean of precision and recall.
+                </div>
+
+                <div>
+                    <strong style="color:#7c3aed;">ROC-AUC:</strong>
+                    Ability of the model to distinguish between classes.
+                </div>
+
+            </div>
         </div>
-    </div>
-    """, unsafe_allow_html=True)
+        """,
+        unsafe_allow_html=True
+    )
 
 # ===================== PAGE: FEATURE IMPORTANCE =====================
 def feature_importance_page():
