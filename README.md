@@ -4,7 +4,7 @@ A Machine Learning project for predicting customer churn in the telecommunicatio
 
 ## 🚀 Live Demo
 
-🔗 **Streamlit App:** Add your deployed Streamlit URL here
+🔗 **Streamlit App:** https://telecom-customer-churn-3edenvhrggyzukofwar9ap.streamlit.app/
 
 ---
 
@@ -220,7 +220,7 @@ telecom-customer-churn/
 Clone the repository:
 
 ```bash
-git clone YOUR_GITHUB_REPOSITORY_URL
+git clone https://github.com/mohamedaamar744-ux/telecom-customer-churn.git
 cd telecom-customer-churn
 ```
 
