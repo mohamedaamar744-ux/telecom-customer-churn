@@ -1340,67 +1340,67 @@ def model_comparison_page():
         )
 
   
-st.markdown("""
-<div style="
-    background:#13132a;
-    border-radius:12px;
-    padding:16px;
-    border:1px solid #2d2d5a;
-    margin-top:20px;
-">
+    st.markdown(
+        """
+        <div style="
+            background:#13132a;
+            border-radius:12px;
+            padding:16px;
+            border:1px solid #2d2d5a;
+            margin-top:20px;
+        ">
+            <div style="
+                font-size:13px;
+                color:#94a3b8;
+                font-weight:600;
+                margin-bottom:12px;
+            ">
+                📋 Metric Guide
+            </div>
 
-    <div style="
-        font-size:13px;
-        color:#94a3b8;
-        font-weight:600;
-        margin-bottom:12px;
-    ">
-        📋 Metric Guide
-    </div>
+            <div style="
+                display:grid;
+                grid-template-columns:1fr 1fr;
+                gap:12px;
+                font-size:12px;
+                color:#e2e8f0;
+            ">
 
-    <div style="
-        display:grid;
-        grid-template-columns:1fr 1fr;
-        gap:12px;
-        font-size:12px;
-        color:#e2e8f0;
-    ">
+                <div>
+                    <strong style="color:#7c3aed;">Accuracy:</strong>
+                    Percentage of all predictions that are correct.
+                </div>
 
-        <div>
-            <strong style="color:#7c3aed;">Accuracy:</strong>
-            Percentage of all predictions that are correct.
+                <div>
+                    <strong style="color:#7c3aed;">Precision (Yes):</strong>
+                    Of all customers predicted to churn, how many actually churned.
+                </div>
+
+                <div>
+                    <strong style="color:#7c3aed;">Recall (Yes):</strong>
+                    Of all customers who actually churned, how many were correctly identified.
+                </div>
+
+                <div>
+                    <strong style="color:#7c3aed;">F1-score (Yes):</strong>
+                    Balance between Precision and Recall.
+                </div>
+
+                <div>
+                    <strong style="color:#7c3aed;">ROC-AUC:</strong>
+                    Measures how well the model distinguishes churners from non-churners.
+                </div>
+
+                <div>
+                    <strong style="color:#10b981;">Churn Focus:</strong>
+                    Higher Recall helps identify more customers who are likely to churn.
+                </div>
+
+            </div>
         </div>
-
-        <div>
-            <strong style="color:#7c3aed;">Precision (Yes):</strong>
-            Of all customers predicted to churn, how many actually churned.
-        </div>
-
-        <div>
-            <strong style="color:#7c3aed;">Recall (Yes):</strong>
-            Of all customers who actually churned, how many were correctly identified.
-        </div>
-
-        <div>
-            <strong style="color:#7c3aed;">F1-score (Yes):</strong>
-            Balance between Precision and Recall.
-        </div>
-
-        <div>
-            <strong style="color:#7c3aed;">ROC-AUC:</strong>
-            Measures how well the model distinguishes churners from non-churners.
-        </div>
-
-        <div>
-            <strong style="color:#10b981;">Churn Focus:</strong>
-            Higher Recall helps identify more customers who are likely to churn.
-        </div>
-
-    </div>
-
-</div>
-""", unsafe_allow_html=True)
-
+        """,
+        unsafe_allow_html=True
+    )
 
 # ===================== PAGE: FEATURE IMPORTANCE =====================
 def feature_importance_page():
