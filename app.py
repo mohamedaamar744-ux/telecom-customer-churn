@@ -1339,47 +1339,48 @@ def model_comparison_page():
         )
 
     st.markdown(
-        """
-        <div style="background:#13132a;border-radius:12px;padding:16px;
-                    border:1px solid #2d2d5a;margin-top:20px;">
-            <div style="font-size:13px;color:#94a3b8;font-weight:600;
-                        margin-bottom:8px;">
-                📋 Metric Guide
-            </div>
+    """
+    <div style="background:#13132a;border-radius:12px;padding:16px;
+                border:1px solid #2d2d5a;margin-top:20px;">
 
-            <div style="display:grid;grid-template-columns:1fr 1fr;
-                        gap:12px;font-size:12px;color:#e2e8f0;">
-
-                <div>
-                    <strong style="color:#7c3aed;">Accuracy:</strong>
-                    Overall correctness of the model.
-                </div>
-
-                <div>
-                    <strong style="color:#7c3aed;">Precision (Yes):</strong>
-                    Of all predicted churners, how many actually churned.
-                </div>
-
-                <div>
-                    <strong style="color:#7c3aed;">Recall (Yes):</strong>
-                    Of all actual churners, how many were correctly identified.
-                </div>
-
-                <div>
-                    <strong style="color:#7c3aed;">F1-score (Yes):</strong>
-                    Harmonic mean of precision and recall.
-                </div>
-
-                <div>
-                    <strong style="color:#7c3aed;">ROC-AUC:</strong>
-                    Ability of the model to distinguish between classes.
-                </div>
-
-            </div>
+        <div style="font-size:13px;color:#94a3b8;font-weight:600;
+                    margin-bottom:12px;">
+            📋 Metric Guide
         </div>
-        """,
-        unsafe_allow_html=True
-    )
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;
+                    gap:12px;font-size:12px;color:#e2e8f0;">
+
+            <div>
+                <strong style="color:#7c3aed;">Accuracy:</strong>
+                Overall correctness of the model.
+            </div>
+
+            <div>
+                <strong style="color:#7c3aed;">Precision (Yes):</strong>
+                Of all predicted churners, how many actually churned.
+            </div>
+
+            <div>
+                <strong style="color:#7c3aed;">Recall (Yes):</strong>
+                Of all actual churners, how many were correctly identified.
+            </div>
+
+            <div>
+                <strong style="color:#7c3aed;">F1-score (Yes):</strong>
+                Harmonic mean of precision and recall.
+            </div>
+
+            <div>
+                <strong style="color:#7c3aed;">ROC-AUC:</strong>
+                Ability of the model to distinguish between classes.
+            </div>
+
+        </div>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
 
 # ===================== PAGE: FEATURE IMPORTANCE =====================
 def feature_importance_page():
