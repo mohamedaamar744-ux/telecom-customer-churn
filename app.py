@@ -1339,48 +1339,69 @@ def model_comparison_page():
             use_container_width=True
         )
 
-    st.markdown(
-        """
-        <div style="background:#13132a;border-radius:12px;padding:16px;
-                    border:1px solid #2d2d5a;margin-top:20px;">
-            <div style="font-size:13px;color:#94a3b8;font-weight:600;
-                        margin-bottom:8px;">
-                📋 Metric Guide
-            </div>
+  ```python
+st.markdown("""
+<div style="
+    background:#13132a;
+    border-radius:12px;
+    padding:16px;
+    border:1px solid #2d2d5a;
+    margin-top:20px;
+">
 
-            <div style="display:grid;grid-template-columns:1fr 1fr;
-                        gap:12px;font-size:12px;color:#e2e8f0;">
+    <div style="
+        font-size:13px;
+        color:#94a3b8;
+        font-weight:600;
+        margin-bottom:12px;
+    ">
+        📋 Metric Guide
+    </div>
 
-                <div>
-                    <strong style="color:#7c3aed;">Accuracy:</strong>
-                    Overall correctness of the model.
-                </div>
+    <div style="
+        display:grid;
+        grid-template-columns:1fr 1fr;
+        gap:12px;
+        font-size:12px;
+        color:#e2e8f0;
+    ">
 
-                <div>
-                    <strong style="color:#7c3aed;">Precision (Yes):</strong>
-                    Of all predicted churners, how many actually churned.
-                </div>
-
-                <div>
-                    <strong style="color:#7c3aed;">Recall (Yes):</strong>
-                    Of all actual churners, how many were correctly identified.
-                </div>
-
-                <div>
-                    <strong style="color:#7c3aed;">F1-score (Yes):</strong>
-                    Harmonic mean of precision and recall.
-                </div>
-
-                <div>
-                    <strong style="color:#7c3aed;">ROC-AUC:</strong>
-                    Ability of the model to distinguish between classes.
-                </div>
-
-            </div>
+        <div>
+            <strong style="color:#7c3aed;">Accuracy:</strong>
+            Percentage of all predictions that are correct.
         </div>
-        """,
-        unsafe_allow_html=True
-    )
+
+        <div>
+            <strong style="color:#7c3aed;">Precision (Yes):</strong>
+            Of all customers predicted to churn, how many actually churned.
+        </div>
+
+        <div>
+            <strong style="color:#7c3aed;">Recall (Yes):</strong>
+            Of all customers who actually churned, how many were correctly identified.
+        </div>
+
+        <div>
+            <strong style="color:#7c3aed;">F1-score (Yes):</strong>
+            Balance between Precision and Recall.
+        </div>
+
+        <div>
+            <strong style="color:#7c3aed;">ROC-AUC:</strong>
+            Measures how well the model distinguishes churners from non-churners.
+        </div>
+
+        <div>
+            <strong style="color:#10b981;">Churn Focus:</strong>
+            Higher Recall helps identify more customers who are likely to churn.
+        </div>
+
+    </div>
+
+</div>
+""", unsafe_allow_html=True)
+```
+
 # ===================== PAGE: FEATURE IMPORTANCE =====================
 def feature_importance_page():
     st.markdown("<h1 style='font-size:24px;margin-bottom:4px;'>Feature Importance & Explainability</h1>", unsafe_allow_html=True)
@@ -1691,57 +1712,155 @@ def batch_prediction_page():
     st.markdown('</div>', unsafe_allow_html=True)
 
 # ===================== PAGE: ABOUT =====================
+
+```python
 def about_page():
     st.markdown(
-        "<h1 style='font-size:24px;margin-bottom:4px;'>About</h1>",
+        "<h1 style='font-size:24px;margin-bottom:4px;'>🧠 Churn Intelligence</h1>",
         unsafe_allow_html=True
     )
 
     st.markdown(
         "<p style='color:#94a3b8;font-size:13px;margin-bottom:24px;'>"
-        "Customer Churn Prediction Project"
+        "Machine Learning powered telecom customer churn prediction"
         "</p>",
         unsafe_allow_html=True
     )
 
-    st.markdown("""<div class="card">
-<h3 style="color:#f8fafc;margin-bottom:16px;">🧠 Churn Intelligence</h3>
-<p style="line-height:1.8;color:#e2e8f0;margin-bottom:16px;">This application uses machine learning to predict customer churn for a telecom company. The model was trained on the Telco Customer Churn dataset containing 7,043 customer records.</p>
-<h4 style="color:#f8fafc;margin:24px 0 12px 0;">Model Details</h4>
-<ul style="line-height:1.8;color:#e2e8f0;padding-left:20px;">
-<li><strong>Algorithm:</strong> XGBoost (Tuned)</li>
-<li><strong>Best Params:</strong> max_depth=5, n_estimators=200, learning_rate=0.1</li>
-<li><strong>Accuracy:</strong> 85.31%</li>
-<li><strong>ROC-AUC:</strong> 0.91</li>
-<li><strong>Recall:</strong> 0.72</li>
-</ul>
-<h4 style="color:#f8fafc;margin:24px 0 12px 0;">Features Used</h4>
-<p style="line-height:1.8;color:#e2e8f0;margin-bottom:16px;">The model uses 23 features including demographics, account information, services subscribed, and billing details to make predictions.</p>
-<h4 style="color:#f8fafc;margin:24px 0 12px 0;">How to Use</h4>
-<ol style="line-height:1.8;color:#e2e8f0;padding-left:20px;">
-<li>Navigate to <strong>Predict Churn</strong> to make individual predictions.</li>
-<li>Use <strong>Batch Prediction</strong> to process multiple customers via CSV.</li>
-<li>Explore <strong>Model Performance</strong> and <strong>Feature Importance</strong> for insights.</li>
-<li>Check <strong>Business Insights</strong> for actionable recommendations.</li>
-</ol>
-<div style="margin-top:24px;padding-top:16px;border-top:1px solid #2d2d5a;font-size:12px;color:#64748b;">Built with Streamlit • Powered by XGBoost • Dataset: Telco Customer Churn</div>
-</div>""", unsafe_allow_html=True)
-# ===================== MAIN ROUTING =====================
-page = st.session_state.page
+    # ===================== PROJECT OVERVIEW =====================
 
-if page == 'Overview':
-    overview_page()
-elif page == 'Predict Churn':
-    predict_churn_page()
-elif page == 'Model Performance':
-    model_performance_page()
-elif page == 'Model Comparison':
-    model_comparison_page()
-elif page == 'Feature Importance':
-    feature_importance_page()
-elif page == 'Business Insights':
-    business_insights_page()
-elif page == 'Batch Prediction':
-    batch_prediction_page()
-elif page == 'About':
-    about_page()
+    st.markdown(
+        '<div class="section-header">About the Project</div>',
+        unsafe_allow_html=True
+    )
+
+    st.markdown("""
+    <div class="card">
+        <p style="color:#e2e8f0;font-size:14px;line-height:1.7;">
+            This application uses machine learning to predict customer churn
+            for a telecom company using the
+            <strong>Telco Customer Churn dataset</strong>,
+            which contains <strong>7,043 customer records</strong>.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # ===================== MODEL DETAILS =====================
+
+    st.markdown(
+        '<div class="section-header">Model Details</div>',
+        unsafe_allow_html=True
+    )
+
+    col1, col2, col3, col4 = st.columns(4)
+
+    with col1:
+        st.markdown("""
+        <div class="card" style="text-align:center;">
+            <div class="card-title">Selected Model</div>
+            <div class="card-value" style="font-size:20px;">
+                Logistic Regression
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+    with col2:
+        st.markdown("""
+        <div class="card" style="text-align:center;">
+            <div class="card-title">Accuracy</div>
+            <div class="card-value">75.09%</div>
+        </div>
+        """, unsafe_allow_html=True)
+
+    with col3:
+        st.markdown("""
+        <div class="card" style="text-align:center;">
+            <div class="card-title">ROC-AUC</div>
+            <div class="card-value">0.862</div>
+        </div>
+        """, unsafe_allow_html=True)
+
+    with col4:
+        st.markdown("""
+        <div class="card" style="text-align:center;">
+            <div class="card-title">Recall</div>
+            <div class="card-value">0.828</div>
+            <div class="card-subtitle">Churn = Yes</div>
+        </div>
+        """, unsafe_allow_html=True)
+
+    st.markdown("""
+    <div class="insight-banner">
+        <div class="insight-icon">🎯</div>
+        <div class="insight-text">
+            <strong>Why Logistic Regression?</strong>
+            It achieved the strongest Recall, F1-Score, and ROC-AUC
+            among the evaluated models, making it particularly useful
+            for identifying customers likely to churn.
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # ===================== FEATURES =====================
+
+    st.markdown(
+        '<div class="section-header">Features Used</div>',
+        unsafe_allow_html=True
+    )
+
+    st.markdown("""
+    <div class="card">
+        <p style="color:#e2e8f0;font-size:14px;line-height:1.7;">
+            The model uses <strong>23 features</strong> covering customer
+            demographics, account information, subscribed services,
+            contract details, and billing information.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # ===================== HOW TO USE =====================
+
+    st.markdown(
+        '<div class="section-header">How to Use</div>',
+        unsafe_allow_html=True
+    )
+
+    st.markdown("""
+    <div class="card">
+        <ol style="color:#e2e8f0;font-size:14px;line-height:2;">
+            <li>Navigate to <strong>Predict Churn</strong> to make individual predictions.</li>
+            <li>Use <strong>Batch Prediction</strong> to process multiple customers using a CSV file.</li>
+            <li>Explore <strong>Model Performance</strong> to compare the evaluated models.</li>
+            <li>Check <strong>Feature Importance</strong> and <strong>Business Insights</strong> for actionable insights.</li>
+        </ol>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # ===================== PROJECT HIGHLIGHTS =====================
+
+    st.markdown(
+        '<div class="section-header">Project Highlights</div>',
+        unsafe_allow_html=True
+    )
+
+    st.markdown("""
+    <div class="card">
+        <ul style="color:#e2e8f0;font-size:14px;line-height:2;">
+            <li>Exploratory Data Analysis (EDA)</li>
+            <li>Data preprocessing and feature engineering</li>
+            <li>Multiple machine learning models</li>
+            <li>Model evaluation and comparison</li>
+            <li>Customer churn prediction</li>
+            <li>Interactive Streamlit dashboard</li>
+            <li>Business-oriented insights</li>
+        </ul>
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown("""
+    <div style="text-align:center;margin-top:30px;color:#94a3b8;font-size:12px;">
+        Built with Streamlit • Powered by Machine Learning •
+        Dataset: Telco Customer Churn
+    </div>
+    """, unsafe_allow_html=True)
+```
