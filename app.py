@@ -1713,7 +1713,7 @@ def batch_prediction_page():
 
 # ===================== PAGE: ABOUT =====================
 
-```python
+
 def about_page():
     st.markdown(
         "<h1 style='font-size:24px;margin-bottom:4px;'>🧠 Churn Intelligence</h1>",
