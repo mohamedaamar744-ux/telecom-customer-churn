@@ -78,7 +78,7 @@ The preprocessing pipeline included:
 * Feature transformation
 * Removing unnecessary identifiers such as `customerID`
 * Preparing features for Machine Learning
-* Scaling features where required
+* Scaling numerical features where required
 
 The processed dataset is stored in:
 
@@ -101,14 +101,27 @@ Hyperparameter tuning was also performed to improve model performance.
 
 ### Model Selection
 
-The final model selection was based on classification performance, with particular attention to the ability to identify customers who are likely to churn.
+The final model was selected based on classification performance, with particular attention to **Recall for the churn class**, since identifying customers who are likely to churn is a key business objective.
 
-The project includes the trained model artifacts:
+The evaluated models were compared using Accuracy, Precision, Recall, F1-Score, and ROC-AUC.
+
+After evaluation and hyperparameter tuning, the **Tuned Logistic Regression** model was selected as the final model.
+
+The Logistic Regression model was tuned using **GridSearchCV**, with **Recall** as the optimization metric.
+
+The final model uses:
 
 ```text
-best_xgb.pkl
+C = 1
+```
+
+The trained model artifacts include:
+
+```text
 churn_model.pkl
 scaler.pkl
+feature_names.json
+preprocessing_config.json
 ```
 
 ---
@@ -126,9 +139,17 @@ The models were evaluated using:
 
 For churn prediction, **Recall for the churn class** is particularly important because missing a customer who is likely to churn can represent a valuable retention opportunity.
 
-The tuned model achieved a ROC-AUC score of approximately:
+### Final Model Performance
 
-**0.862**
+| Metric          | Tuned Logistic Regression |
+| --------------- | ------------------------: |
+| Accuracy        |                **75.09%** |
+| Precision (Yes) |                 **0.518** |
+| Recall (Yes)    |                 **0.828** |
+| F1-Score (Yes)  |                 **0.638** |
+| ROC-AUC         |                 **0.862** |
+
+The final model achieved a **ROC-AUC of 0.862** and a **Recall of 0.828** for the churn class, demonstrating a strong ability to identify customers who are likely to leave the service.
 
 ---
 
@@ -170,6 +191,10 @@ The application uses the trained Machine Learning artifacts to provide predictio
 * Churn probability
 * Interactive visualizations
 * Model-based insights
+* Model comparison
+* Feature importance
+* Business insights
+* Batch prediction
 
 ---
 
@@ -184,7 +209,6 @@ telecom-customer-churn/
 │
 ├── app.py
 │
-├── best_xgb.pkl
 ├── churn_model.pkl
 ├── scaler.pkl
 │
