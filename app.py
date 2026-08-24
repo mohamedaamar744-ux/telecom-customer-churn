@@ -1400,7 +1400,7 @@ st.markdown("""
 
 </div>
 """, unsafe_allow_html=True)
-```
+
 
 # ===================== PAGE: FEATURE IMPORTANCE =====================
 def feature_importance_page():
